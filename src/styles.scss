@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.icon {
+    height: 44px;
+    width: 44px;
+    display: inline-block;
+}
+
+main {
+    padding: 0.5em;
+}
+
+

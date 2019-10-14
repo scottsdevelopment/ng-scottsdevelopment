@@ -1,0 +1,8 @@
+<aside [hidden]="!open">
+    <button class="icon" (click)="toggle()">X</button>
+    <ul>
+        <li *ngFor="let route of routes">
+            <a (click)="close()" [routerLink]="route.path">{{ route.data.title }}</a>
+        </li>
+    </ul>
+</aside>
