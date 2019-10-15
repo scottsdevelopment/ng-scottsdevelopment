@@ -5,13 +5,15 @@ import { PrismService } from '../services/prism/prism.service';
   selector: 'code-block',
   templateUrl: './code-block.component.html',
   styleUrls: ['./code-block.component.scss',
-  '../../../node_modules/prismjs/themes/prism-okaidia.css'],
+  '../../../node_modules/prismjs/themes/prism-okaidia.css',
+  '../../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css'],
   preserveWhitespaces: true,
   encapsulation: ViewEncapsulation.None
 })
 export class CodeBlockComponent implements OnInit {
-  @Input() language: string;
+  @Input() language: string = 'none';
   @Input() code: string;
+  @Input() lineNumbers: boolean = true;
 
   constructor(private el: ElementRef,  private prismService: PrismService) { 
     
@@ -28,7 +30,11 @@ export class CodeBlockComponent implements OnInit {
     }
   }
 
-  getLanguageClass() {
-    return `language-${this.language}`;
+  getClass() {
+    let klass: string = `language-${this.language}`;
+    if (this.lineNumbers) {
+      klass += ' line-numbers';
+    }
+    return klass;
   }
 }

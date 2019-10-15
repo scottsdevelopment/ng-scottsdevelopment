@@ -1,4 +1,5 @@
-<app-header [onMenuClick]="appNavigation.toggle.bind(appNavigation)" [title]="title"></app-header>
+<div (click)="appNavigation.close()" [className]="appNavigation.open ? 'open overlay' : 'overlay'"></div>
+<app-header (onMenuClick)="appNavigation.toggle()" [title]="title"></app-header>
 <app-navigation #appNavigation>
 </app-navigation>
 <main>

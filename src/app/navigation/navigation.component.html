@@ -1,8 +1,8 @@
-<aside [hidden]="!open">
-    <button class="icon" (click)="toggle()">X</button>
-    <ul>
-        <li *ngFor="let route of routes">
-            <a (click)="close()" [routerLink]="route.path">{{ route.data.title }}</a>
+<aside [className]="open ? 'navigation navigation--open' : 'navigation'">
+    <button class="right icon" (click)="toggle()">X</button>
+    <ul class="navigation__routes">
+        <li class="navigation__routes-item" *ngFor="let route of routes">
+            <a class="navigation__routes-link" (click)="close()" [routerLink]="route.path">{{ route.data.title }}</a>
         </li>
     </ul>
 </aside>

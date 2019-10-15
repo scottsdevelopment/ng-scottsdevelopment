@@ -1,6 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-* {
+
+body {
     margin: 0;
+    padding: 0;
+}
+
+main {
+    margin: 0 2em;
+    padding: 0;
+}
+
+h1, h2, h3, p, a {
     font-family: 'Poppins', sans-serif;
 }
 
@@ -8,10 +18,15 @@
     height: 44px;
     width: 44px;
     display: inline-block;
+    background: none;
+    border: none;
+    font-size: 22px;
+}
+
+.right {
+    float: right;
 }
 
 main {
     padding: 0.5em;
 }
-
-
