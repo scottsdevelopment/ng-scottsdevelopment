@@ -1,7 +1,7 @@
-import { Component, OnInit, ComponentFactoryResolver, Type, Compiler, ComponentFactory, NgModule, ViewContainerRef, Input } from '@angular/core';
+import { Component, OnInit, Compiler, ComponentFactory, NgModule, ViewContainerRef, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 import { JitModule } from 'src/app/jit/jit.module';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'ng-dynamic',
@@ -12,52 +12,47 @@ export class DynamicComponent implements OnInit {
   contents: string;
   factories: ComponentFactory<any>[] = [];
 
-  constructor(private http: HttpClient, private viewContainerRef: ViewContainerRef, private compiler: Compiler, private componentFactoryResolver: ComponentFactoryResolver) {
+  constructor(private http: HttpClient, private viewContainerRef: ViewContainerRef, private compiler: Compiler) {
 
   }
   
   ngOnInit() {
-    console.log(this.src);
     if (!this.src) {
       return;
     }
-    this.http.get(this.src, { responseType: "text"}).subscribe((contents: string) => {
-      this.contents = contents;
-      let component = this.createDynamicComponent();
-      let componentFactory = this.getFactory(component);
-      let componentRef = this.viewContainerRef.createComponent(componentFactory);
-      componentRef.changeDetectorRef.detectChanges();
-    })
+    this.http.get(this.src, { responseType: "text" }).subscribe(
+      (contents: string) => {
+        this.contents = contents;
+        try {
+          let componentRef = this.viewContainerRef.createComponent(this.addDynamicModule());
+          componentRef.changeDetectorRef.detectChanges();
+        } catch(error) {
+          console.log(error);
+        }
+      },
+      (error) => { console.log(error); }
+    )
   }
 
-  getFactory(component: any): ComponentFactory<any> {
-    let factory = this.factories.find(factory => factory.componentType === component);
-    if (!factory) {
-      factory = this._createAdHocComponentFactory(component);
-    }
-    return factory;
-  }
-
-  _createAdHocComponentFactory(component: Type<any>): ComponentFactory<any> {
-    @NgModule({
-      declarations: [component],
-      entryComponents: [component],
-      imports: [JitModule, CommonModule],
-    })
-    class AdHocModule {}
-    let factory = this.compiler.compileModuleAndAllComponentsSync(AdHocModule).componentFactories
-      .find(factory => factory.componentType === component);
-    this.factories.push(factory);
-    return factory;
-  }
-  
-  private createDynamicComponent(): Type<any> {
+  addDynamicModule(): ComponentFactory<any> {
     @Component({
       template: this.contents
     })
-    class InsertedComponent { }
-   
-    return InsertedComponent;
+    class TemplateComponent { 
+      constructor() {
+      }
+    }
+    @NgModule({
+      declarations: [TemplateComponent],
+      imports: [JitModule, BrowserModule],
+    })
+    class TemplateModule {}
+
+    const _ngModuleFactory = this.compiler.compileModuleAndAllComponentsSync(TemplateModule);
+    const _cmpFactory = _ngModuleFactory.componentFactories.find((_componentFactory) =>
+      _componentFactory.componentType === TemplateComponent
+    );
+    return _cmpFactory;
   }
 
 }

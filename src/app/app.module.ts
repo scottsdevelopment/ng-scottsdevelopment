@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CompilerFactory, Compiler, COMPILER_OPTIONS } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { JitModule } from './jit/jit.module';
@@ -11,6 +11,11 @@ import { HomeComponent } from './pages/home/home.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { DynamicComponent } from './dynamic/dynamic.component';
+import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
+
+export function createCompiler(fn: CompilerFactory): Compiler {
+	return fn.createCompiler();
+}
 
 @NgModule({
   declarations: [
@@ -29,7 +34,6 @@ import { DynamicComponent } from './dynamic/dynamic.component';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
