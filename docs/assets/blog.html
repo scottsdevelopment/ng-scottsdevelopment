@@ -1,0 +1,71 @@
+<h1>Code snippets and highlighting</h1>
+<p>I am currently in the proccess of converting my site over to Angular and building a small portfolio of projects that I am working on. I wanted to add snippets of code to the page so I wrote a custom code-block element, so I could share code snippets with highlighting and line numbers for common solutions, here is an example of the syntax:</p>
+<code-block language="html" code="<code-block language=&quot;html&quot; code=&quot;<h1>Your code here!</h1>&quot;>
+</code-block>">
+</code-block>
+<p>Above you will see a self-embedded example of the code snippet, you can use this format to include snippets on the page now.</p>
+<code-block language="html" code="<h1>Your code here!</h1>">
+</code-block>
+<p>The code that is powering the code-block component includes a basic service, and a component. Below we will see how we put it all together to create this useful component.</p>
+<h3>prism.service.ts</h3>
+<code-block language="typescript" code="import { Injectable } from '@angular/core';
+import * as Prism from 'prismjs';
+
+import 'prismjs/components/prism-javascript';
+import 'prismjs/components/prism-typescript';
+import 'prismjs/components/prism-css';
+import 'prismjs/components/prism-scss';
+
+@Injectable({
+  providedIn: 'root',  
+})
+export class PrismService {
+  constructor() { 
+  
+  }
+
+  prism() {
+    return Prism;
+  }
+}
+"></code-block>
+<p>This service loads our external prism dependency and the plugins we want to use for syntax highlighting, it then exposes the object so it can be used globally in our runtime.</p> 
+<h3>code-block.component.html</h3>
+<code-block language="html" code="<pre><code [class]=&quot;getLanguageClass()&quot;>{{ code }}</code></pre>
+"></code-block>
+<h3>code-block.component.ts</h3>
+<code-block language="typescript" code="import { Component, OnInit, Input, ElementRef, ViewEncapsulation } from '@angular/core';
+import { PrismService } from '../services/prism/prism.service';
+
+@Component({
+  selector: 'code-block',
+  templateUrl: './code-block.component.html',
+  styleUrls: ['./code-block.component.scss',
+  '../../../node_modules/prismjs/themes/prism-okaidia.css'],
+  preserveWhitespaces: true,
+  encapsulation: ViewEncapsulation.None
+})
+export class CodeBlockComponent implements OnInit {
+  @Input() language: string;
+  @Input() code: string;
+
+  constructor(private el: ElementRef,  private prismService: PrismService) { 
+    
+  }
+
+  ngOnInit() {
+
+  }
+
+  ngAfterViewChecked() {
+    // highlightElement(code-block > pre > code)
+    if (this.el.nativeElement && this.el.nativeElement.children[0] && this.el.nativeElement.children[0].children[0]) {
+      this.prismService.prism().highlightElement(this.el.nativeElement.children[0].children[0]);
+    }
+  }
+
+  getLanguageClass() {
+    return `language-${this.language}`;
+  }
+}
+"></code-block>
