@@ -1,4 +1,4 @@
-import { Component, OnInit, Compiler, ComponentFactory, NgModule, ViewContainerRef, Input } from '@angular/core';
+import { Component, OnInit, Compiler, ComponentFactory, NgModule, ViewContainerRef, Input, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JitModule } from 'src/app/jit/jit.module';
 import { BrowserModule } from '@angular/platform-browser';

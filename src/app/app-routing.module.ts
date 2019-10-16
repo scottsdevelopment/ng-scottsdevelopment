@@ -5,7 +5,8 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 
 const routes: Routes = [
-  { path: '', data: { title: 'Home', navigation: true }, component: HomeComponent },
+  { path: '',  redirectTo: '/blog', pathMatch: 'full' },
+  { path: 'blog', data: { title: 'Blog', navigation: true }, component: HomeComponent },
   { path: 'contact', data: { title: 'Contact', navigation: true }, component: ContactComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
